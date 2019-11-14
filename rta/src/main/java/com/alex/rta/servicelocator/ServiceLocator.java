@@ -1,4 +1,4 @@
-package servicelocator;
+package com.alex.rta.servicelocator;
 
 public class ServiceLocator {
     private static ServiceLocator _instance = new ServiceLocator();
