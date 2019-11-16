@@ -33,7 +33,7 @@ public class AccountServlet extends HttpServlet {
         this.publishers.add(responsePublisher);
     }
 
-    private TransferRequest parseRequest(HttpServletRequest req){
+    private TransferRequest parseRequest(HttpServletRequest req) {
         String queryString = req.getQueryString();
         AccountServletData accountServletData = gson.fromJson(queryString, AccountServletData.class);
         TransferRequest transferRequest = new TransferRequest(accountServletData.sourceSystemId, accountServletData.sourceAccountId, accountServletData.targetAccountId, accountServletData.amount);

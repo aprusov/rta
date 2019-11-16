@@ -11,3 +11,4 @@ public interface IAppBuilder {
     IAppBuilder withStorage();
     void buildAndStart();
 }
+

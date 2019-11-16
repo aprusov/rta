@@ -11,6 +11,8 @@
     <modules>
         <module>rta</module>
         <module>launcher</module>
+        <module>setup</module>
+        <module>dbcodegen</module>
     </modules>
 
     <properties>

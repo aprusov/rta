@@ -1,6 +1,5 @@
 package com.alex.rta.producer;
 
-import com.alex.rta.producer.service.AccountServlet;
 import com.alex.rta.subscriber.ITransferSubscriber;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -8,13 +7,19 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.http.HttpServlet;
+import java.util.Map;
+
 public class TransferMoneyWebEndpoint implements ITransferRequestEndpoint {
-    private final AccountServlet accountServlet;
+
+    private final int port;
+    private final Map<String, HttpServlet> servletHolderMap;
     private Server server;
 
-    public TransferMoneyWebEndpoint() {
+    public TransferMoneyWebEndpoint(int port, Map<String, HttpServlet> servletHolderMap) {
+        this.port = port;
+        this.servletHolderMap = servletHolderMap;
         server = new Server();
-        accountServlet = new AccountServlet();
     }
 
     public void setSubscriber(ITransferSubscriber subscriber) {
@@ -23,14 +28,16 @@ public class TransferMoneyWebEndpoint implements ITransferRequestEndpoint {
 
     public void start() {
         ServerConnector connector = new ServerConnector(server);
-        connector.setPort(8090);
+        connector.setPort(port);
         server.setConnectors(new Connector[]{connector});
 
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
 
-        ServletHolder servletHolder = new ServletHolder(accountServlet);
-        handler.addServletWithMapping(servletHolder, "/*");
+        servletHolderMap.keySet().forEach(x -> {
+            ServletHolder servletHolder = new ServletHolder(servletHolderMap.get(x));
+            handler.addServletWithMapping(servletHolder, x);
+        });
 
         try {
             server.start();

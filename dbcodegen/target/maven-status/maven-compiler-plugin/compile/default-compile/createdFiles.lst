@@ -1,0 +1,5 @@
+com/db/alex/rta/codegen/tables/Accounts.class
+com/db/alex/rta/codegen/DefaultCatalog.class
+com/db/alex/rta/codegen/DefaultSchema.class
+com/db/alex/rta/codegen/Tables.class
+com/db/alex/rta/codegen/tables/records/AccountsRecord.class
