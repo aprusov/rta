@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.alex.rta</groupId>
-            <artifactId>rta</artifactId>
+            <artifactId>rta-lib</artifactId>
         </dependency>
     </dependencies>
 

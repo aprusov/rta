@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>rta</module>
+        <module>rta-lib</module>
         <module>launcher</module>
         <module>setup</module>
         <module>dbcodegen</module>
@@ -39,7 +39,7 @@
             </dependency>
             <dependency>
                 <groupId>com.alex.rta</groupId>
-                <artifactId>rta</artifactId>
+                <artifactId>rta-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

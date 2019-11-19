@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rta</artifactId>
+    <artifactId>rta-lib</artifactId>
 
 
     <dependencies>
