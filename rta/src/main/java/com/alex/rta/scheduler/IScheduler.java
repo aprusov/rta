@@ -4,5 +4,5 @@ import com.alex.rta.subscriber.ISubscriber;
 
 public interface IScheduler<T> extends ISubscriber<T> {
     void start();
-    void subscribe(ISubscriber<T> subscriber);
+    void subscribe(ISubscriber<T>... subscribers);
 }

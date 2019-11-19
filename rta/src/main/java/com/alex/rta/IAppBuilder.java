@@ -11,7 +11,7 @@ public interface IAppBuilder {
     <T> IAppBuilder withEvent(Consumer<IEventBuilder<T>> eventRegistration);
     void buildAndStart();
 
-    public interface IEventBuilder<T>{
+    interface IEventBuilder<T>{
         IEventBuilder<T> withProducer(Supplier<IRequestEndpoint<T>> endpointSupplier);
         IEventBuilder<T> withScheduler(IScheduler<T> scheduler);
         IEventBuilder<T> withConsumer(ISubscriber<T> subscriber);

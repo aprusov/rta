@@ -11,7 +11,11 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
+import java.util.Arrays;
+import java.util.Set;
 import java.util.concurrent.ThreadFactory;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 public class DisruptorConsumer implements IScheduler<TransferRequest> {
     private final Disruptor<TransferRequestEvent> disruptor;
@@ -42,9 +46,15 @@ public class DisruptorConsumer implements IScheduler<TransferRequest> {
     }
 
     @Override
-    public void subscribe(ISubscriber subscriber) {
-        EventHandler<TransferRequest> eventHandler =
-                (event, sequence, endOfBatch) -> subscriber.next(event);
-        disruptor.handleEventsWith(new EventHandler[]{eventHandler});
+    public void subscribe(ISubscriber<TransferRequest>... subscribers) {
+        EventHandler[] eventHandlers = Arrays.stream(subscribers)
+                .map(DisruptorConsumer::getEventHandler)
+                .toArray(EventHandler[]::new);
+        disruptor.handleEventsWith(eventHandlers);
+    }
+
+    private static EventHandler<TransferRequestEvent> getEventHandler(ISubscriber<TransferRequest> x){
+        return (TransferRequestEvent event, long sequence, boolean endOfBatch) ->
+                x.next(event.getTransferRequest());
     }
 }

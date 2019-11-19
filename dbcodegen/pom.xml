@@ -11,24 +11,18 @@
 
     <artifactId>dbcodegen</artifactId>
 
-    <properties>
-
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
-            <version>3.12.3</version>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-meta</artifactId>
-            <version>3.12.3</version>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
-            <version>3.12.3</version>
         </dependency>
     </dependencies>
     <build>
@@ -36,13 +30,12 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
-                <version>3.12.3</version>
-
+                <version>${jooq-version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.xerial</groupId>
                         <artifactId>sqlite-jdbc</artifactId>
-                        <version>3.28.0</version>
+                        <version>${sqlite-jdbc-version}</version>
                     </dependency>
                 </dependencies>
 
@@ -59,7 +52,7 @@
                     <!-- Configure the database connection -->
                     <jdbc>
                         <driver>org.sqlite.JDBC</driver>
-                        <url>jdbc:sqlite:/Users/alex/dev/rta-root/working/db/rta.db</url>
+                        <url>jdbc:sqlite:C:/dev/git/rta/working/db/rta.db</url>
                     </jdbc>
                     <!-- Generator parameters -->
                     <generator>
