@@ -1,8 +1,9 @@
-package com.alex.rta.producer.service;
+package com.alex.rta.producer.service.transfer;
 
-import com.alex.rta.data.TransferRequest;
-import com.alex.rta.data.TransferRequestState;
-import com.alex.rta.subscriber.ITransferSubscriber;
+import com.alex.rta.data.requests.transfer.TransferRequest;
+import com.alex.rta.data.requests.transfer.TransferRequestState;
+import com.alex.rta.producer.IRequestEndpoint;
+import com.alex.rta.subscriber.ISubscriber;
 import com.google.gson.Gson;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
@@ -12,16 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 
-public class AccountServlet extends HttpServlet {
-    private ITransferSubscriber subscriber;
+public class TransferServlet extends HttpServlet implements IRequestEndpoint<TransferRequest> {
+    private ISubscriber subscriber;
     private final Gson gson;
     private final HashSet<ResponsePublisher> publishers = new HashSet<>();
 
-    public AccountServlet() {
+    public TransferServlet() {
         gson = new Gson();
     }
 
-    public void setSubscriber(ITransferSubscriber subscriber) {
+    public void setSubscriber(ISubscriber<TransferRequest> subscriber) {
         this.subscriber = subscriber;
     }
 
@@ -35,8 +36,8 @@ public class AccountServlet extends HttpServlet {
 
     private TransferRequest parseRequest(HttpServletRequest req) {
         String queryString = req.getQueryString();
-        AccountServletData accountServletData = gson.fromJson(queryString, AccountServletData.class);
-        TransferRequest transferRequest = new TransferRequest(accountServletData.sourceSystemId, accountServletData.sourceAccountId, accountServletData.targetAccountId, accountServletData.amount);
+        TransferServletData data = gson.fromJson(queryString, TransferServletData.class);
+        TransferRequest transferRequest = new TransferRequest(data.sourceSystemId, data.sourceAccountId, data.targetAccountId, data.amount);
         return transferRequest;
     }
 

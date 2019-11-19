@@ -1,42 +1,50 @@
 package com.alex.rta;
 
 
-import com.alex.rta.producer.ITransferRequestEndpoint;
-import com.alex.rta.scheduler.ITransferScheduler;
-import com.alex.rta.subscriber.ITransferSubscriber;
+import com.alex.rta.producer.IRequestEndpoint;
+import com.alex.rta.scheduler.IScheduler;
+import com.alex.rta.subscriber.ISubscriber;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class AppBuilder implements IAppBuilder {
 
-    private Set<ITransferRequestEndpoint> endpoints = new HashSet<>();
-    private Set<ITransferSubscriber> subscribers = new HashSet<>();
-    private ITransferScheduler scheduler;
+    Set<IEventBuilder> eventRegistrations = new HashSet<>();
 
     @Override
-    public IAppBuilder withProducer(ITransferRequestEndpoint endpoint) {
-        this.endpoints.add(endpoint);
+    public <T> IAppBuilder withEvent(Consumer<IEventBuilder<T>> eventRegistration) {
+        EventBuilder<T> x = new EventBuilder<>();
+        eventRegistration.accept(x);
+        eventRegistrations.add(x);
         return this;
     }
 
-    @Override
-    public IAppBuilder withScheduler(ITransferScheduler scheduler) {
-        this.scheduler = scheduler;
-        return this;
-    }
+    private static class EventBuilder<T> implements IEventBuilder<T>{
 
-    @Override
-    public IAppBuilder withConsumer(ITransferSubscriber subscriber) {
-        this.subscribers.add(subscriber);
-        return this;
-    }
+        @Override
+        public IEventBuilder<T> withProducer(Supplier<IRequestEndpoint<T>> endpoint) {
+            return this;
+        }
 
-    @Override
-    public IAppBuilder withStorage() {
-        return this;
-    }
+        @Override
+        public IEventBuilder<T> withScheduler(IScheduler<T> scheduler) {
+            return this;
+        }
 
+        @Override
+        public IEventBuilder<T> withConsumer(ISubscriber<T> subscriber) {
+            return this;
+        }
+
+        @Override
+        public IEventBuilder<T> withStorage() {
+            return this;
+        }
+
+    }
     @Override
     public void buildAndStart() {
         this.subscribers.forEach(x->scheduler.subscribe(x));

@@ -13,7 +13,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Accounts extends TableImpl<AccountsRecord> {
 
-    private static final long serialVersionUID = -91169172;
+    private static final long serialVersionUID = -462200860;
 
     /**
      * The reference instance of <code>accounts</code>
@@ -52,13 +52,17 @@ public class Accounts extends TableImpl<AccountsRecord> {
     /**
      * The column <code>accounts.id</code>.
      */
-    public final TableField<AccountsRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<AccountsRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * The column <code>accounts.name</code>.
      */
-    @java.lang.Deprecated
-    public final TableField<AccountsRecord, Object> NAME = createField(DSL.name("name"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"string\""), this, "");
+    public final TableField<AccountsRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(200), this, "");
+
+    /**
+     * The column <code>accounts.balance</code>.
+     */
+    public final TableField<AccountsRecord, Double> BALANCE = createField(DSL.name("balance"), org.jooq.impl.SQLDataType.DOUBLE, this, "");
 
     /**
      * Create a <code>accounts</code> table reference
@@ -125,11 +129,11 @@ public class Accounts extends TableImpl<AccountsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<Integer, Object> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row3<Long, String, Double> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }

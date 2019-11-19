@@ -5,6 +5,7 @@ package com.db.alex.rta.codegen;
 
 
 import com.db.alex.rta.codegen.tables.Accounts;
+import com.db.alex.rta.codegen.tables.Requests;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +31,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -1223523799;
+    private static final long serialVersionUID = -478906438;
 
     /**
      * The reference instance of <code></code>
@@ -41,6 +42,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>accounts</code>.
      */
     public final Accounts ACCOUNTS = com.db.alex.rta.codegen.tables.Accounts.ACCOUNTS;
+
+    /**
+     * The table <code>requests</code>.
+     */
+    public final Requests REQUESTS = com.db.alex.rta.codegen.tables.Requests.REQUESTS;
 
     /**
      * No further instances allowed
@@ -64,6 +70,7 @@ public class DefaultSchema extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
-            Accounts.ACCOUNTS);
+            Accounts.ACCOUNTS,
+            Requests.REQUESTS);
     }
 }

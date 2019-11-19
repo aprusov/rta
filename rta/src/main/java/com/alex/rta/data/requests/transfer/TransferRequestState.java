@@ -1,4 +1,4 @@
-package com.alex.rta.data;
+package com.alex.rta.data.requests.transfer;
 
 public enum TransferRequestState {
     NEW,

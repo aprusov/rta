@@ -11,19 +11,28 @@ import java.util.function.Consumer;
 public class DbConnectionTarget {
 
     private String url;
+
     public DbConnectionTarget(String url) {
         this.url = url;
     }
 
     public void execute(Consumer<DSLContext> consumer) {
         try (Connection conn = DriverManager.getConnection(url)) {
-            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            DSLContext create = DSL.using(conn, SQLDialect.SQLITE);
             consumer.accept(create);
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void executeTransaction(Consumer<DSLContext> consumer) {
+        try (Connection conn = DriverManager.getConnection(url)) {
+            DSLContext create = DSL.using(conn, SQLDialect.SQLITE);
+            create.transaction(() -> {
+                consumer.accept(create);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

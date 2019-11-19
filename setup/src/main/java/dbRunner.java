@@ -18,12 +18,16 @@ public class dbRunner {
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
             statement.execute("drop table if exists accounts");
-            statement.execute("create table accounts (id integer, name string)");
+            statement.execute("create table accounts (id bigint, name varchar(200), balance double)");
 
-            statement.execute("insert into accounts (id, name) values (1, 'name') ");
+            statement.execute("drop table if exists requests");
+            statement.execute("create table requests (id bigint, type tinyint, data varchar(4000))");
 
-            ResultSet resultSet = statement.executeQuery("select * from accounts");
-            resultSet.next();
+
+
+//            statement.execute("insert into accounts (id, name) values (1, 'name') ");
+//            ResultSet resultSet = statement.executeQuery("select * from accounts");
+//            resultSet.next();
 
 
 //            statement.executeUpdate("drop table if exists requests");

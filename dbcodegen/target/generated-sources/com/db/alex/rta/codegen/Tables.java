@@ -5,6 +5,7 @@ package com.db.alex.rta.codegen;
 
 
 import com.db.alex.rta.codegen.tables.Accounts;
+import com.db.alex.rta.codegen.tables.Requests;
 
 import javax.annotation.processing.Generated;
 
@@ -26,4 +27,9 @@ public class Tables {
      * The table <code>accounts</code>.
      */
     public static final Accounts ACCOUNTS = Accounts.ACCOUNTS;
+
+    /**
+     * The table <code>requests</code>.
+     */
+    public static final Requests REQUESTS = Requests.REQUESTS;
 }

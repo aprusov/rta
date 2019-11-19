@@ -1,6 +1,5 @@
 package com.alex.rta.producer;
 
-import com.alex.rta.subscriber.ITransferSubscriber;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -8,22 +7,22 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.http.HttpServlet;
+import java.util.HashMap;
 import java.util.Map;
 
-public class TransferMoneyWebEndpoint implements ITransferRequestEndpoint {
+public class WebService {
 
     private final int port;
-    private final Map<String, HttpServlet> servletHolderMap;
+    private final Map<String, HttpServlet> servletHolderMap = new HashMap<>();
     private Server server;
 
-    public TransferMoneyWebEndpoint(int port, Map<String, HttpServlet> servletHolderMap) {
+    public WebService(int port) {
         this.port = port;
-        this.servletHolderMap = servletHolderMap;
         server = new Server();
     }
 
-    public void setSubscriber(ITransferSubscriber subscriber) {
-        this.accountServlet.setSubscriber(subscriber);
+    public void registerServlet(String url, HttpServlet servlet){
+        servletHolderMap.put(url, servlet);
     }
 
     public void start() {

@@ -1,6 +1,6 @@
-package com.alex.rta.producer.service;
+package com.alex.rta.producer.service.transfer;
 
-public class AccountServletData {
+public class TransferServletData {
     public long sourceSystemId ;
     public long sourceAccountId;
     public long targetAccountId;
