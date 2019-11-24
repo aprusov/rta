@@ -52,7 +52,7 @@
                     <!-- Configure the database connection -->
                     <jdbc>
                         <driver>org.sqlite.JDBC</driver>
-                        <url>jdbc:sqlite:C:/dev/git/rta/working/db/rta.db</url>
+                        <url>jdbc:sqlite:${project.basedir}/../working/db/rta.db</url>
                     </jdbc>
                     <!-- Generator parameters -->
                     <generator>
