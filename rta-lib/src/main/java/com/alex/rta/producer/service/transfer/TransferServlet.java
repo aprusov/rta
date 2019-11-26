@@ -4,22 +4,20 @@ import com.alex.rta.data.requests.transfer.TransferRequest;
 import com.alex.rta.data.requests.transfer.TransferRequestState;
 import com.alex.rta.producer.IRequestEndpoint;
 import com.alex.rta.producer.service.ServletUtils;
+import com.alex.rta.statusUpdateRepository.StatusUpdateRepository;
 import com.alex.rta.subscriber.ISubscriber;
 import com.google.gson.Gson;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.Charset;
 import java.util.HashSet;
 
 public class TransferServlet extends HttpServlet implements IRequestEndpoint<TransferRequest> {
     private ISubscriber<TransferRequest> subscriber;
     private final Gson gson;
-    private final HashSet<ResponsePublisher> publishers = new HashSet<>();
 
     public TransferServlet() {
         gson = new Gson();
@@ -38,8 +36,12 @@ public class TransferServlet extends HttpServlet implements IRequestEndpoint<Tra
                 return;
             }
             this.subscriber.next(transferRequest);
-            ResponsePublisher responsePublisher = new ResponsePublisher(transferRequest, resp);
-            this.publishers.add(responsePublisher);
+
+            StatusUpdateRepository.getInstance().setListener(
+                    transferRequest.getId(),
+                    x->requestStatusListener(x, resp),
+                    TransferRequestState.SUCCEEDED, TransferRequestState.FAILED
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +49,7 @@ public class TransferServlet extends HttpServlet implements IRequestEndpoint<Tra
 
     private TransferRequest parseRequest(HttpServletRequest req) {
         String body = ServletUtils.getRequestBody(req);
-        if(body == null){
+        if (body == null) {
             return null;
         }
         TransferServletData data = gson.fromJson(body, TransferServletData.class);
@@ -55,16 +57,9 @@ public class TransferServlet extends HttpServlet implements IRequestEndpoint<Tra
         return transferRequest;
     }
 
-    private class ResponsePublisher {
-        private final Disposable subscribtion;
-
-        ResponsePublisher(TransferRequest transferRequest, HttpServletResponse response) {
-            PublishSubject<TransferRequestState> stateObservable = PublishSubject.create();
-            subscribtion = stateObservable.subscribe(x -> {
-                if (x.equals(TransferRequestState.SUCCEEDED)) {
-                    publishers.remove(this);
-                }
-            });
+    private static void requestStatusListener(TransferRequestState x, final HttpServletResponse resp) {
+        if (x == TransferRequestState.SUCCEEDED) {
+            resp.setStatus(HttpServletResponse.SC_OK);
         }
     }
 }

@@ -11,7 +11,8 @@
 
     <modules>
         <module>rta-lib</module>
-        <module>launcher</module>
+        <module>application</module>
+        <module>application-test</module>
         <module>setup</module>
         <module>dbcodegen</module>
     </modules>
@@ -28,10 +29,17 @@
         <disruptor-version>3.4.2</disruptor-version>
         <rxjava-version>2.2.0</rxjava-version>
         <commons-io-version>2.6</commons-io-version>
+
+        <junit-version>5.5.2</junit-version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alex.rta</groupId>
+                <artifactId>setup</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.alex.rta</groupId>
                 <artifactId>dbcodegen</artifactId>
@@ -42,6 +50,12 @@
                 <artifactId>rta-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alex.rta</groupId>
+                <artifactId>application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
@@ -93,6 +107,13 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io-version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit-version}</version>
             </dependency>
         </dependencies>
 

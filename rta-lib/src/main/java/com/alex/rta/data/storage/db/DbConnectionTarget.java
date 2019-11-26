@@ -11,14 +11,16 @@ import java.util.function.Consumer;
 public class DbConnectionTarget {
 
     private String url;
+    private final SQLDialect dialect;
 
-    public DbConnectionTarget(String url) {
+    public DbConnectionTarget(String url, SQLDialect dialect) {
         this.url = url;
+        this.dialect = dialect;
     }
 
     public void execute(Consumer<DSLContext> consumer) {
         try (Connection conn = DriverManager.getConnection(url)) {
-            DSLContext create = DSL.using(conn, SQLDialect.SQLITE);
+            DSLContext create = DSL.using(conn, dialect);
             consumer.accept(create);
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +29,7 @@ public class DbConnectionTarget {
 
     public void executeTransaction(Consumer<DSLContext> consumer) {
         try (Connection conn = DriverManager.getConnection(url)) {
-            DSLContext create = DSL.using(conn, SQLDialect.SQLITE);
+            DSLContext create = DSL.using(conn, dialect);
             create.transaction(() -> {
                 consumer.accept(create);
             });

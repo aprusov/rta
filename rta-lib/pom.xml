@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <artifactId>dbcodegen</artifactId>
             <groupId>com.alex.rta</groupId>
+            <artifactId>dbcodegen</artifactId>
         </dependency>
 
         <dependency>

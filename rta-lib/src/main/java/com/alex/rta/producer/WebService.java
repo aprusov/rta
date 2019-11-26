@@ -35,6 +35,7 @@ public class WebService {
 
         servletHolderMap.keySet().forEach(x -> {
             ServletHolder servletHolder = new ServletHolder(servletHolderMap.get(x));
+            servletHolder.setAsyncSupported(true);
             handler.addServletWithMapping(servletHolder, x);
         });
 
