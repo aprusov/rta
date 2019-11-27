@@ -17,10 +17,10 @@ public class create {
         statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
         statement.execute("drop table if exists accounts");
-        statement.execute("create table accounts (id bigint, name varchar(200), balance double)");
+        statement.execute("create table accounts (id integer primary key, accountId bigint, name varchar(200), balance double)");
 
         statement.execute("drop table if exists requests");
-        statement.execute("create table requests (id bigint, type tinyint, data varchar(4000))");
+        statement.execute("create table requests (id integer primary key, type tinyint, data varchar(4000))");
     }
 
 }

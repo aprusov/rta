@@ -1,4 +1,8 @@
-﻿$data = @{
+﻿
+
+start-job -scriptblock {
+
+$data = @{
     sourceSystemId = 100;
     sourceAccountId = 1001;
     targetAccountId = 1002;
@@ -7,5 +11,6 @@
 
 $json = ConvertTo-Json -InputObject $data
 $url = 'http://localhost:8090/transfer'
-
 Invoke-WebRequest -Uri $url -Method Post -Body $json
+
+}

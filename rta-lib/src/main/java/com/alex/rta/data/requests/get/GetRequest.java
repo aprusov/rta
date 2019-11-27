@@ -1,10 +1,13 @@
 package com.alex.rta.data.requests.get;
 
-public class GetRequest {
-    private long sourceSystemId ;
+import com.alex.rta.data.requests.RequestBase;
+
+public class GetRequest extends RequestBase {
+    private long sourceSystemId;
     private long accountId;
 
     public GetRequest(long sourceSystemId, long accountId) {
+        super();
         this.sourceSystemId = sourceSystemId;
         this.accountId = accountId;
     }

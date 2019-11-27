@@ -1,8 +1,11 @@
 package com.alex.rta.data.storage.db;
 
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
+import org.jooq.impl.ThreadLocalTransactionProvider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,13 +31,13 @@ public class DbConnectionTarget {
     }
 
     public void executeTransaction(Consumer<DSLContext> consumer) {
-        try (Connection conn = DriverManager.getConnection(url)) {
-            DSLContext create = DSL.using(conn, dialect);
-            create.transaction(() -> {
-                consumer.accept(create);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try (Connection conn = DriverManager.getConnection(url)) {
+//            DSLContext create = DSL.using(conn, dialect);
+//            create.transaction(() -> {
+//                consumer.accept(create);
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

@@ -14,10 +14,12 @@ import com.alex.rta.subscriber.StoreRequestSubscriber;
 import org.jooq.SQLDialect;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class App {
 
-    public static final String dbUrl = "rta.db";
+    public static final String dbUrl = "jdbc:sqlite:rta.db";
     public static final int webEndpointPort = 8090;
 
     public static final String transferUrl = "/transfer";
@@ -29,6 +31,9 @@ public class App {
         DbConnectionTarget dbConnectionTarget = new DbConnectionTarget(dbUrl, SQLDialect.SQLITE);
         DbAccountService dbAccountService = new DbAccountService(dbConnectionTarget);
 
+        // actual executor should guarantee queue
+        Executor reactor = Executors.newSingleThreadExecutor();
+
         IAppBuilder appBuilder = new AppBuilder()
                 .<TransferRequest>withEvent(x -> x
                         .withScheduler(new DisruptorConsumer())
@@ -37,8 +42,9 @@ public class App {
                             webService.registerServlet(transferUrl, servlet);
                             return servlet;
                         })
+                        // should have a separate storage
                         .withConsumer(new StoreRequestSubscriber<>(dbConnectionTarget, (byte) 1))
-                        .withConsumer(new ProcessTransferRequestSubscriber(dbAccountService))
+                        .withConsumer(new ProcessTransferRequestSubscriber(dbAccountService, reactor))
                 )
                 .<GetRequest>withEvent(x -> x
                         .withProducer(() -> {
@@ -46,7 +52,8 @@ public class App {
                             webService.registerServlet(getUrl, servlet);
                             return servlet;
                         })
-                        .withConsumer(new ProcessGetRequestSubscriber(dbAccountService)));
+                        .withConsumer(new ProcessGetRequestSubscriber(dbAccountService)))
+                ;
 
         appBuilder.buildAndStart();
         webService.start();

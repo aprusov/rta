@@ -1,6 +1,7 @@
 package com.alex.rta.scheduler.disruptor;
 
 import com.alex.rta.data.requests.transfer.TransferRequest;
+import com.alex.rta.log.LogUtils;
 import com.alex.rta.scheduler.IScheduler;
 import com.alex.rta.subscriber.ISubscriber;
 import com.lmax.disruptor.BusySpinWaitStrategy;
@@ -12,10 +13,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.concurrent.ThreadFactory;
-import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 public class DisruptorConsumer implements IScheduler<TransferRequest> {
     private final Disruptor<TransferRequestEvent> disruptor;
@@ -53,8 +51,10 @@ public class DisruptorConsumer implements IScheduler<TransferRequest> {
         disruptor.handleEventsWith(eventHandlers);
     }
 
-    private static EventHandler<TransferRequestEvent> getEventHandler(ISubscriber<TransferRequest> x){
-        return (TransferRequestEvent event, long sequence, boolean endOfBatch) ->
-                x.next(event.getTransferRequest());
+    private static EventHandler<TransferRequestEvent> getEventHandler(ISubscriber<TransferRequest> x) {
+        return (TransferRequestEvent event, long sequence, boolean endOfBatch) -> {
+            LogUtils.log("Scheduling ringbuffer token " + sequence);
+            x.next(event.getTransferRequest());
+        };
     }
 }
